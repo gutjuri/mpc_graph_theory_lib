@@ -8,14 +8,14 @@ This repository includes (currently we only recommend experimentation):
 * Will include complete test files.
 
 ## Pre-requisites
-* `SCALE-MAMBA` 1.11 or above. 
-* `numpy` 1.16 or above. (exclusively to __test__, which in this context means, execute [`test_graph.mpc`](mpc_graph_theory_lib/test_graph/test_graph.mpc)).
+
+* Docker
 
 ## Installation and Configuration
-1. Download and configure `SCALE-MAMBA`:
-2. Copy all  `.py` files __as is__ directly in the `Compiler` folder in `SCALE-MAMBA`. 
-3. Copy the tests folders in the `Programs` folder of your `SCALE-MAMBA` installation. 
-4. You can now run them and check all tests are in <span style='color:green'>green.</span> (NOT in <span style='color:red'>red.</span>)
+
+It is preferred to run this project using Docker.
+To build an image, run `docker build -t mpc-graph-theory .`.
+To run this image, run `docker run --rm -it mpc-graph-theory sh run_graphs.sh`.
 
 ## Contact Information:
 If you have questions please contact any of the authors. Current repo maintainer is:\

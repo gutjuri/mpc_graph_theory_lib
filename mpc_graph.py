@@ -73,8 +73,7 @@ def dijkstra_optimized(weights, source):
     p_vertex_id = vector_permutation(P, factor)
 
 
-
-    test_print_vector_secret([x for xs in weights for x in xs])
+    #test_print_vector_secret([x for xs in weights for x in xs])
 
     @for_range(n)
     def _(i):
@@ -82,32 +81,39 @@ def dijkstra_optimized(weights, source):
         d_prime = sint(T)
         v = sint(0)
         
+        # L7-11
         @for_range(n-1, i-1, -1)
         def _(j):
             global d_prime, v
             c = ineq(distance[j], d_prime)
             v = ternary_operator(c, j, v)
             d_prime = ternary_operator(c, distance[j], d_prime)
+
+        # L12
         v_open = None
         if isinstance(v, sint):            
             v_open = v.reveal()
         else: 
             v_open = v
+        
+        # L13
         exchange_row_matrix(i, v_open, p_weights)
         exchange_vector(i, v_open, distance)
         exchange_vector(i, v_open, p_vertex_id)
         
+        # L14-19
         @for_range(i+1, n)
         def _(j):
             a = distance[i] + p_weights[i][j]
             c = ineq(a,  distance[j])
             distance[j] = ternary_operator(c, a, distance[j])
             alpha[j] = ternary_operator(c, p_vertex_id[i], alpha[j])
-    test_print_vector_secret(p_vertex_id)
-    return (alpha, distance)
+    return (alpha, distance, p_vertex_id)
 
+# Party 0 holds the source vertex
 source = sint.get_input_from(0)
 
+# Party 1 holds the graph
 n = 5
 weights = sint.Matrix(n, n)
 for i in range(n):
@@ -115,6 +121,7 @@ for i in range(n):
         weights[i][j] = sint.get_input_from(1)
 
 
-(alpha, distance) = dijkstra_optimized(weights, source)
+(alpha, distance, vertex_id) = dijkstra_optimized(weights, source)
 test_print_vector_secret(alpha)
 test_print_vector_secret(distance)
+test_print_vector_secret(vertex_id)

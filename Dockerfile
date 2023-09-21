@@ -18,8 +18,7 @@ RUN apt-get update && apt-get install -y \
   libntl-dev \
   libsodium-dev \
   libssl-dev \
-  libtool \
-  python3
+  libtool
 
 ADD install-mp-spdz.sh .
 RUN ./install-mp-spdz.sh $fromsource
