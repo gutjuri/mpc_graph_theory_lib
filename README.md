@@ -17,6 +17,21 @@ It is preferred to run this project using Docker.
 To build an image, run `docker build -t mpc-graph-theory .`.
 To run this image, run `docker run --rm -it mpc-graph-theory sh run_graphs.sh`.
 
+## Example Graph
+
+Currently, the following Graph is encoded in Input-P1-0:
+
+```mermaid
+flowchart LR
+    0 -- 1 --- 1
+    0 -- 3 --- 2
+    1 -- 1 --- 3
+    2 -- 1 --- 3
+    2 -- 4 --- 4
+    3 -- 50 --- 4
+
+```
+
 ## Contact Information:
 If you have questions please contact any of the authors. Current repo maintainer is:\
 Abdelrahaman ALY
