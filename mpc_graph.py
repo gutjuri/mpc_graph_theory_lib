@@ -1,5 +1,5 @@
 ## MIT License
-from Compiler.types import sint
+from Compiler.types import sint, Array
 from Compiler.library import if_then, end_if, print_ln, print_str
 T = 99999
 
@@ -52,20 +52,39 @@ def ternary_operator(c, if_true, if_false):
 
 
 def dijkstra_optimized(weights, source):
+    # L1-3
     n = len(weights)
-    distance = [T] * n
-    alpha = [0] * n
-    vertex_id = [i for i in range(n)]
-    distance[source] = sint(0)
+    distance = sint.Array(n)
+    alpha = sint.Array(n)
+    P = sint.Array(n)
 
+    @for_range(n)
+    def f(i):
+        distance[i] = ternary_operator(sint(i) == source, sint(0), sint(T))
+        alpha[i] = sint(i)
+        P[i] = sint(i)
+    
+    #test_print_vector_secret(distance)
+
+    # L4
     factor = obtain_random_factor(0)
     p_weights = matrix_permutation(weights, factor)
-    p_vertex_id = vector_permutation(vertex_id, factor)
+    distance = vector_permutation(distance, factor)
+    p_vertex_id = vector_permutation(P, factor)
 
-    for i in range(n):
-        d_prime = T
+
+
+    test_print_vector_secret([x for xs in weights for x in xs])
+
+    @for_range(n)
+    def _(i):
+        global d_prime, v
+        d_prime = sint(T)
         v = sint(0)
-        for j in range(n-1, i-1, -1):
+        
+        @for_range(n-1, i-1, -1)
+        def _(j):
+            global d_prime, v
             c = ineq(distance[j], d_prime)
             v = ternary_operator(c, j, v)
             d_prime = ternary_operator(c, distance[j], d_prime)
@@ -77,10 +96,25 @@ def dijkstra_optimized(weights, source):
         exchange_row_matrix(i, v_open, p_weights)
         exchange_vector(i, v_open, distance)
         exchange_vector(i, v_open, p_vertex_id)
-
-        for j in range(i+1, n):
+        
+        @for_range(i+1, n)
+        def _(j):
             a = distance[i] + p_weights[i][j]
             c = ineq(a,  distance[j])
             distance[j] = ternary_operator(c, a, distance[j])
             alpha[j] = ternary_operator(c, p_vertex_id[i], alpha[j])
-    return alpha
+    test_print_vector_secret(p_vertex_id)
+    return (alpha, distance)
+
+source = sint.get_input_from(0)
+
+n = 5
+weights = sint.Matrix(n, n)
+for i in range(n):
+    for j in range(n):
+        weights[i][j] = sint.get_input_from(1)
+
+
+(alpha, distance) = dijkstra_optimized(weights, source)
+test_print_vector_secret(alpha)
+test_print_vector_secret(distance)
